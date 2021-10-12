@@ -3,7 +3,7 @@ pipeline{
     agent any
 
     environment { 
-        NAMESPACE = "testapp"
+        NAMESPACE = "testapp-prod"
     }
 
     stages{
@@ -12,30 +12,31 @@ pipeline{
                 echo "testujem aplikaciu"
             }           
         }
+      
+        stage("Deploy to prod"){
+            script {
+                // Variables for input
+                def inputVersion
 
-        stage("Build image and push to quay"){
-            steps{
-                script{
-                    try {
-                        sh 'oc delete buildconfig testapp-bc -n testapp'
-                    }
-                    catch (Exception e) {
-                        echo 'buildconfig does not exists' + e.toString()
-                    }
-                    sh '''
-                        ./build-config.sh ${BUILD_NUMBER} ${NAMESPACE}
-                        oc start-build testapp-bc --follow --wait -n ${NAMESPACE}
-                    '''
-                }                
-            }           
-        }
-        
-        stage("Deploy"){
-            steps{
+                // Get the input
+                def userInput = input(
+                        id: 'userInput', message: 'Enter version to deploy into production',
+                        parameters: [
+                            string(defaultValue: 'None',
+                                    description: 'Version',
+                                    name: 'version'),
+                        ])
+
+                // Save to variables. Default to empty string if not found.
+                inputVersion = userInput.version?:''
+
+                // Echo to console
+                echo('Into production will be deployed version ${inputVersion}')
+
                 sh '''
                     oc set image deployment testapp-deployment \
-                    testapp=quay.io/cerveny/testapp:dev-v${BUILD_NUMBER} \
-                    -n ${NAMESPACE} --record
+                    testapp=quay.io/cerveny/testapp:${inputVersion} \
+                    -n ${NAMESPACE} --record                
                 '''
             }
         }
