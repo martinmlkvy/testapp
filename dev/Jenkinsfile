@@ -1,43 +1,43 @@
-//pipeline na deploy do DEV
-pipeline{
-    agent any
+// //pipeline na deploy do DEV
+// pipeline{
+//     agent any
 
-    environment { 
-        NAMESPACE = "testapp"
-    }
+//     environment { 
+//         NAMESPACE = "testapp"
+//     }
 
-    stages{
-        stage("Test"){
-            steps{
-                echo "testujem aplikaciu"
-            }           
-        }
+//     stages{
+//         stage("Test"){
+//             steps{
+//                 echo "testujem aplikaciu"
+//             }           
+//         }
 
-        stage("Build image and push to quay"){
-            steps{
-                script{
-                    try {
-                        sh 'oc delete buildconfig testapp-bc -n testapp'
-                    }
-                    catch (Exception e) {
-                        echo 'buildconfig does not exists' + e.toString()
-                    }
-                    sh '''
-                        ./build-config.sh ${BUILD_NUMBER} ${NAMESPACE}
-                        oc start-build testapp-bc --follow --wait -n ${NAMESPACE}
-                    '''
-                }                
-            }           
-        }
+//         stage("Build image and push to quay"){
+//             steps{
+//                 script{
+//                     try {
+//                         sh 'oc delete buildconfig testapp-bc -n testapp'
+//                     }
+//                     catch (Exception e) {
+//                         echo 'buildconfig does not exists' + e.toString()
+//                     }
+//                     sh '''
+//                         ./build-config.sh ${BUILD_NUMBER} ${NAMESPACE}
+//                         oc start-build testapp-bc --follow --wait -n ${NAMESPACE}
+//                     '''
+//                 }                
+//             }           
+//         }
         
-        stage("Deploy"){
-            steps{
-                sh '''
-                    oc set image deployment testapp-deployment \
-                    testapp=quay.io/cerveny/testapp:dev-v${BUILD_NUMBER} \
-                    -n ${NAMESPACE} --record
-                '''
-            }
-        }
-    }
-}
+//         stage("Deploy"){
+//             steps{
+//                 sh '''
+//                     oc set image deployment testapp-deployment \
+//                     testapp=quay.io/cerveny/testapp:dev-v${BUILD_NUMBER} \
+//                     -n ${NAMESPACE} --record
+//                 '''
+//             }
+//         }
+//     }
+// }
