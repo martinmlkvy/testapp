@@ -15,31 +15,11 @@ pipeline{
       
         stage("Deploy to prod"){
             steps{
-                script {
-                    // Variables for input
-                    def inputVersion
-
-                    // Get the input
-                    def userInput = input(
-                            id: 'userInput', message: 'Enter version to deploy into production',
-                            parameters: [
-                                string(defaultValue: 'None',
-                                        description: 'Version',
-                                        name: 'version'),
-                            ])
-
-                    // Save to variables. Default to empty string if not found.
-                    inputVersion = userInput.version?:''
-
-                    // Echo to console
-                    echo('Into production will be deployed version ${inputVersion}')
-
-                    sh '''
-                        oc set image deployment testapp-deployment \
-                        testapp=quay.io/cerveny/testapp:${inputVersion} \
-                        -n ${NAMESPACE} --record                
-                    '''
-                }
+                sh '''
+                    oc set image deployment testapp-deployment \
+                    testapp=quay.io/cerveny/testapp:${appVersion} \
+                    -n ${NAMESPACE} --record                
+                '''                
             }
         }
     }
