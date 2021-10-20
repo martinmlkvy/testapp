@@ -20,7 +20,7 @@ pipeline{
                         sh 'oc delete buildconfig testapp-bc -n testapp'
                     }
                     catch (Exception e) {
-                        echo 'buildconfig does not exists' + e.toString()
+                        echo 'buildconfig does not exists ===>' + e.toString()
                     }
                     sh '''
                         ./build-config.sh ${BUILD_NUMBER} ${NAMESPACE}

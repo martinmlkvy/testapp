@@ -15,7 +15,7 @@ spec:
     type: Git
     git:
       uri: 'https://github.com/martinmlkvy/testapp.git'
-      ref: master
+      ref: prod
   output:
     to:
       kind: DockerImage
