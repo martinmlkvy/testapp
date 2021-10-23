@@ -1,7 +1,7 @@
 kind: BuildConfig
 apiVersion: build.openshift.io/v1
 metadata:
-  name: testapp-quay
+  name: testapp-quay-dva
 spec:
   nodeSelector: {}
   strategy:
@@ -15,10 +15,10 @@ spec:
     type: Git
     git:
       uri: 'https://github.com/martinmlkvy/testapp.git'
-      ref: prod
+      ref: dev
   output:
     to:
       kind: DockerImage
-      name: 'quay.io/cerveny/testapp:verzia-1'
+      name: 'quay.io/cerveny/testapp:verzia-2'
     pushSecret:
       name: quay-credentials

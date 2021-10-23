@@ -4,6 +4,23 @@ metadata:
   name: testapp-template
 
 objects:
+  - kind: ImageStream
+    apiVersion: image.openshift.io/v1
+    metadata:
+      name: testapp-is
+      labels:
+        app: testapp
+    spec:
+      lookupPolicy:
+        local: false
+      tags:
+      - name: "latest"
+        from:
+          kind: DockerImage
+          name: quay.io/cerveny/testapp:verzia-1
+        referencePolicy:
+          type: Source
+
   - kind: Deployment
     apiVersion: apps/v1
     metadata:
@@ -20,18 +37,19 @@ objects:
         spec:
           containers:
             - name: testapp
-              image: quay.io/cerveny/testapp:verzia-12
+              image: testapp-is:latest
               imagePullPolicy: Always
               ports:
                 - containerPort: 8080
       strategy:
         type: RollingUpdate
+
   - kind: Service
     apiVersion: v1
     metadata:
+      name: testapp-service
       labels:
         app: testapp
-      name: testapp-service
     spec:
       ports:
         - port: 8080
@@ -39,6 +57,7 @@ objects:
           targetPort: 8080
       selector:
         app: testapp
+
   - kind: Route
     apiVersion: route.openshift.io/v1
     metadata:
