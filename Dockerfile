@@ -1,4 +1,4 @@
-FROM ubi8/ubi:8.3
+FROM registry.access.redhat.com/ubi8/ubi:8.3
 
 LABEL description="A custom Apache container based on UBI 8"
 
