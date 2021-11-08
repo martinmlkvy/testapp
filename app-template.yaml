@@ -4,23 +4,6 @@ metadata:
   name: testapp-template
 
 objects:
-  - kind: ImageStream
-    apiVersion: image.openshift.io/v1
-    metadata:
-      name: testapp-is
-      labels:
-        app: testapp
-    spec:
-      lookupPolicy:
-        local: false
-      tags:
-      - name: "latest"
-        from:
-          kind: DockerImage
-          name: quay.io/cerveny/testapp:verzia-1
-        referencePolicy:
-          type: Source
-
   - kind: Deployment
     apiVersion: apps/v1
     metadata:
@@ -43,17 +26,6 @@ objects:
                 - containerPort: 8080
       strategy:
         type: RollingUpdate
-      triggers:
-      - type: ConfigChange
-      - type: ImageChange
-        imageChangeParams:
-          automatic: true       # Set automatic=true to trigger a redeployment on image change
-          containerNames:
-            - testapp
-          from:
-            kind: ImageStreamTag
-            namespace: testapp-imagestream
-            name: 'testapp-is:latest'
 
   - kind: Service
     apiVersion: v1

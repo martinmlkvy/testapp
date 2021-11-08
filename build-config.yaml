@@ -19,6 +19,6 @@ spec:
   output:
     to:
       kind: DockerImage
-      name: 'quay.io/cerveny/testapp:verzia-2'
+      name: 'quay.io/cerveny/privaterepo:priv-1'
     pushSecret:
       name: quay-credentials
