@@ -1,0 +1,16 @@
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  name: testapp-is
+  labels:
+    app: testapp
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+  - name: "latest"
+    from:
+      kind: DockerImage
+      name: quay.io/cerveny/testapp:dev-v4
+    referencePolicy:
+      type: Source
