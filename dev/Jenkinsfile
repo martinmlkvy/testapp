@@ -30,12 +30,19 @@ pipeline{
             }           
         }
         
-        stage("Deploy"){
+        // stage("Deploy menenim imagu v deploymente "){
+        //     steps{
+        //         sh '''
+        //             oc set image deployment testapp-deployment \
+        //             testapp=quay.io/cerveny/testapp:dev-v${BUILD_NUMBER} \
+        //             -n ${NAMESPACE} --record
+        //         '''
+        //     }
+        // }
+        stage("Deploy pouzitim imagestream"){
             steps{
                 sh '''
-                    oc set image deployment testapp-deployment \
-                    testapp=quay.io/cerveny/testapp:dev-v${BUILD_NUMBER} \
-                    -n ${NAMESPACE} --record
+                    oc tag quay.io/cerveny/testapp:dev-v${BUILD_NUMBER} testapp-is:latest
                 '''
             }
         }
